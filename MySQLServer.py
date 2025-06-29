@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """Script to create the alx_book_store database in MySQL"""
 
 import mysql.connector
