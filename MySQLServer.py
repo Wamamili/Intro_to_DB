@@ -1,40 +1,37 @@
-# File: MySQLServer.py
+#!/usr/bin/python3
+"""Script to create the alx_book_store database in MySQL"""
 
 import mysql.connector
-from mysql.connector import errorcode
-
-# Replace these with your MySQL credentials
-DB_HOST = "localhost"
-DB_PORT = "3306"
-DB_USER = "root"
-DB_PASSWORD = "890532488"
-
-DB_NAME = "alx_book_store"
+from mysql.connector import Error
 
 def create_database():
+    """Function to create the database"""
     try:
-        # Connect to MySQL server (not to any specific database yet)
-        conn = mysql.connector.connect(
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD
+        # Connect to MySQL server without specifying a database
+        connection = mysql.connector.connect(
+            host='localhost',
+            port = '3306',  
+            user='root',
+            password='890532488'
         )
-        cursor = conn.cursor()
 
-        # Try to create the database
-        try:
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
-            print(f"Database '{DB_NAME}' created successfully!")
-        except mysql.connector.Error as err:
-            print(f"Failed creating database: {err}")
-
-        cursor.close()
-        conn.close()
-
-    except mysql.connector.Error as err:
-        print("Error: Could not connect to the MySQL server.")
-        print(f"Reason: {err}")
+        if connection.is_connected():
+            cursor = connection.cursor()
+            
+            # Create database if it doesn't exist
+            cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
+            
+            print("Database 'alx_book_store' created successfully!")
+            
+    except Error as e:
+        print(f"Error while connecting to MySQL: {e}")
+        
+    finally:
+        # Close the connection
+        if 'connection' in locals() and connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
 
 if __name__ == "__main__":
     create_database()
